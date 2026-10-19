@@ -18,7 +18,11 @@ OSRMRoute также использует OpenStreetMap: это не катал�
 
 1162 реальных POI из OpenStreetMap, автоматический сбор, поиск по типу и названию, строгие фильтры и подробная карта OpenStreetMap с локальным обзорным слоем на случай отсутствия сети. Поиск показывает до 12 **отдельных вариантов** с источниками и оценкой времени; начальный пример содержит три места.
 
-![Рабочее демо Astana Walk](docs/demo.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/demo-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/demo.png">
+  <img alt="Актуальный интерфейс AstanaWalk: поиск мест, подробная карта и рекомендации" src="docs/demo.png">
+</picture>
 
 ## Быстрый запуск
 
