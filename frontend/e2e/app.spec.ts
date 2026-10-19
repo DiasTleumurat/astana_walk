@@ -1,4 +1,31 @@
 import { test, expect } from "@playwright/test";
+import type { Page } from "@playwright/test";
+
+test.beforeEach(async ({ page }) => {
+  // Exercise the real map UI without depending on public tile servers in CI.
+  await page.route("https://tile.openstreetmap.org/**", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e9efe8"/></svg>',
+    }),
+  );
+});
+
+async function submitSearch(page: Page) {
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === "/api/recommendations" &&
+        response.request().method() === "POST",
+    ),
+    page.getByRole("button", { name: "Найти мою прогулку" }).click(),
+  ]);
+  await expect(
+    page.getByRole("button", { name: "Найти мою прогулку" }),
+  ).toBeEnabled();
+  return response;
+}
 
 test("real recommendations, evidence and coffee filter", async ({ page }) => {
   const errors: string[] = [];
@@ -16,9 +43,16 @@ test("real recommendations, evidence and coffee filter", async ({ page }) => {
       .getByRole("link", { name: "OpenStreetMap" }),
   ).toHaveAttribute("href", /openstreetmap.org\/(node|way|relation)\//);
   await page.getByRole("button", { name: "Кофе рядом", exact: true }).click();
-  await page.getByRole("button", { name: "Найти мою прогулку" }).click();
-  await expect(page.getByTestId("place-card")).toHaveCount(3);
-  await expect(page.locator(".place-category").first()).toHaveText("Кафе");
+  const response = await submitSearch(page);
+  expect(response.ok()).toBeTruthy();
+  const result = await response.json();
+  expect(result.recommendations.length).toBeGreaterThan(0);
+  await expect(page.getByTestId("place-card")).toHaveCount(
+    result.recommendations.length,
+  );
+  await expect(page.locator(".place-category")).toHaveText(
+    result.recommendations.map(() => "Кафе"),
+  );
   expect(errors).toEqual([]);
 });
 
@@ -27,7 +61,7 @@ test("strict missing amenity gives honest empty state", async ({ page }) => {
   await expect(page.getByTestId("place-card")).toHaveCount(3);
   await page.getByRole("button", { name: /Ещё пожелания/ }).click();
   await page.getByLabel("Подтверждённые розетки").check();
-  await page.getByRole("button", { name: "Найти мою прогулку" }).click();
+  await submitSearch(page);
   await expect(
     page.getByRole("heading", { name: "Не нашлось подходящих мест" }),
   ).toBeVisible();
@@ -53,7 +87,7 @@ test("geolocation denial and manual location", async ({ page, context }) => {
   await page.getByLabel("Широта", { exact: true }).fill("43.2");
   await page.getByLabel("Долгота", { exact: true }).fill("76.9");
   await page.getByRole("button", { name: "Применить", exact: true }).click();
-  await page.getByRole("button", { name: "Найти мою прогулку" }).click();
+  await submitSearch(page);
   await expect(page.getByText(/Эта точка за пределами/)).toBeVisible();
 });
 
@@ -75,7 +109,7 @@ test("map selection, mobile toggle, no overflow and detailed OSM tiles", async (
     .locator(".leaflet-container")
     .click({ position: { x: 150, y: 180 } });
   await expect(page.locator("#start")).toHaveValue("custom");
-  await page.getByRole("button", { name: "Найти мою прогулку" }).click();
+  await submitSearch(page);
   await expect(
     page.getByRole("button", { name: "Найти мою прогулку" }),
   ).toBeEnabled();
@@ -94,13 +128,13 @@ test("map selection, mobile toggle, no overflow and detailed OSM tiles", async (
 });
 
 test("map failure preserves list; API error has retry", async ({ page }) => {
-  await page.route("**/astana-map.geojson", (r) => r.abort());
+  await page.route("https://tile.openstreetmap.org/**", (r) => r.abort());
   await page.goto("/");
   await expect(page.getByTestId("place-card")).toHaveCount(3);
   await page.route("**/api/recommendations", (r) =>
     r.fulfill({ status: 503, body: "{}" }),
   );
-  await page.getByRole("button", { name: "Найти мою прогулку" }).click();
+  await submitSearch(page);
   await expect(page.getByRole("alert")).toContainText("Не удалось");
   await expect(
     page.getByRole("button", { name: "Попробовать снова" }),
