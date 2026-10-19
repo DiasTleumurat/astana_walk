@@ -1,0 +1,63 @@
+:root {
+  --ground: #eee;
+  --surface: #f8f8f5;
+  --text: #283326;
+  --muted: #566452;
+  --accent: #658864;
+  --border: #ddd;
+  --soft: #e2e5d9;
+  --hover: #d7ddce;
+  --selected: #658864;
+  --on-accent: #fff;
+  --accent-hover: #506e4f;
+  --glass: #f8f8f5f2;
+  --map-ground: #ddd;
+}
+:root[data-theme="dark"] {
+  --ground: #181c14;
+  --surface: #3c3d37;
+  --text: #ecdfcc;
+  --muted: #c2bdab;
+  --accent: #ecdfcc;
+  --border: #697565;
+  --soft: #30372b;
+  --hover: #4b5545;
+  --selected: #697565;
+  --on-accent: #181c14;
+  --accent-hover: #f4e9d8;
+  --glass: #3c3d37f2;
+  --map-ground: #282f24;
+}
+.place-card.active {
+  border-color: var(--accent);
+}
+.place-pin {
+  background: #697565;
+  border-color: var(--surface);
+  color: var(--text);
+}
+.place-pin.selected {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.search-radius {
+  stroke: #38a9ef;
+  fill: #38a9ef;
+}
+.leaflet-interactive[fill="#1b6e66"] {
+  fill: var(--accent);
+}
+.brand-mark {
+  color: var(--accent);
+}
+:root:not([data-theme="dark"]) .leaflet-tile-pane {
+  filter: grayscale(0.8) sepia(0.15);
+}
+:root[data-theme="dark"] .leaflet-tile-pane {
+  filter: grayscale(1) invert(1) sepia(0.2) hue-rotate(30deg) brightness(0.65)
+    contrast(0.85);
+}
+::selection {
+  background: #b7b78a;
+  color: #181c14;
+}

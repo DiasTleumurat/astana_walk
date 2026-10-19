@@ -8,7 +8,7 @@ from backend.config import settings
 def document(poi):
     from backend.config import CATEGORIES
     return ' '.join([poi['name'], *poi.get('names', {}).values(), poi['description'],
-                     *[CATEGORIES[c] for c in poi['categories']], poi.get('address') or '',
+                     *[CATEGORIES.get(c, poi.get('category_label', c)) for c in poi['categories']], poi.get('address') or '',
                      ' '.join(f'{k}: {v}' for k, v in poi.get('tags', {}).items()
                               if k in ('cuisine', 'wheelchair', 'outdoor_seating', 'socket', 'opening_hours'))])
 

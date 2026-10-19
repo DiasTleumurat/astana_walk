@@ -48,7 +48,7 @@ test("geolocation denial and manual location", async ({ page, context }) => {
   });
   await page.goto("/");
   await page.getByRole("button", { name: "Моё местоположение" }).click();
-  await expect(page.getByText("Не удалось получить геолокацию.")).toBeVisible();
+  await expect(page.getByText(/Доступ к геолокации запрещён/)).toBeVisible();
   await page.getByText("Координаты", { exact: true }).click();
   await page.getByLabel("Широта", { exact: true }).fill("43.2");
   await page.getByLabel("Долгота", { exact: true }).fill("76.9");
@@ -57,7 +57,7 @@ test("geolocation denial and manual location", async ({ page, context }) => {
   await expect(page.getByText(/Эта точка за пределами/)).toBeVisible();
 });
 
-test("map selection, mobile toggle, no overflow or third-party requests by default", async ({
+test("map selection, mobile toggle, no overflow and detailed OSM tiles", async ({
   page,
 }, testInfo) => {
   const external: string[] = [];
@@ -88,7 +88,9 @@ test("map selection, mobile toggle, no overflow or third-party requests by defau
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
-  expect(external).toEqual([]);
+  expect(
+    external.every((url) => url.startsWith("https://tile.openstreetmap.org/")),
+  ).toBeTruthy();
 });
 
 test("map failure preserves list; API error has retry", async ({ page }) => {

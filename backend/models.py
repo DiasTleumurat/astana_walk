@@ -4,12 +4,15 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class RecommendationRequest(BaseModel):
+    use_ai: bool = True
     query: str = Field(default='', max_length=600)
     latitude: float = Field(ge=-90, le=90, allow_inf_nan=False)
     longitude: float = Field(ge=-180, le=180, allow_inf_nan=False)
     minutes: int = Field(default=60, ge=15, le=180)
+    time_enabled: bool = True
     radius_m: int = Field(default=2500, ge=100, le=10000)
-    interests: list[Literal['park', 'cafe', 'museum', 'gallery', 'attraction', 'playground', 'viewpoint', 'public_space']] = Field(default_factory=list, max_length=8)
+    limit: int = Field(default=3, ge=1, le=12)
+    interests: list[Literal['park', 'cafe', 'museum', 'gallery', 'attraction', 'playground', 'viewpoint', 'public_space', 'computer_club', 'restaurant', 'cinema', 'shopping_mall', 'library', 'fitness']] = Field(default_factory=list, max_length=14)
     with_child: bool = False
     accessible_only: bool = False
     open_now: bool = False

@@ -16,6 +16,29 @@ def test_time_and_radius_are_hard_constraints(tiny_store, search):
     assert all(p['poi_id'] != 'osm:node:5' for p in result['recommendations'])
 
 
+def test_disabling_time_keeps_long_visits_but_preserves_radius(tiny_store, search):
+    cinema = tiny_store.pois[1]
+    cinema['categories'] = ['cinema']
+    cinema['name'] = 'Test cinema'
+    limited = recommend(request(query='Кинотеатр', minutes=30, radius_m=500), tiny_store, search)
+    assert not limited['recommendations']
+    unlimited = recommend(request(query='Кинотеатр', minutes=30, radius_m=500, time_enabled=False), tiny_store, search)
+    assert len(unlimited['recommendations']) == 1
+    assert unlimited['recommendations'][0]['total_minutes'] > 30
+    assert unlimited['recommendations'][0]['visit_minutes'] == 90
+    assert unlimited['applied_constraints']['time_enabled'] is False
+    cinema['latitude'], cinema['longitude'] = 51.22, 71.58
+    assert not recommend(request(query='Кинотеатр', time_enabled=False, radius_m=500), tiny_store, search)['recommendations']
+
+
+def test_time_switch_overrides_time_mentioned_in_query(tiny_store, search):
+    req = request(query='Кафе на 15 минут', minutes=60, interests=['cafe'], time_enabled=False)
+    result = recommend(req, tiny_store, search)
+    assert result['recommendations']
+    assert result['recommendations'][0]['total_minutes'] > 15
+    assert not recommend(req.model_copy(update={'time_enabled': True}), tiny_store, search)['recommendations']
+
+
 def test_strict_filters_exclude_unknown(tiny_store, search):
     assert recommend(request(sockets_required=True), tiny_store, search)['recommendations'] == []
     result = recommend(request(accessible_only=True, open_now=True), tiny_store, search)

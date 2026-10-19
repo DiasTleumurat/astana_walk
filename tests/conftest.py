@@ -6,6 +6,17 @@ import pytest
 
 from backend.storage import Store
 from backend.search import Search
+from backend.config import settings
+
+
+@pytest.fixture(autouse=True)
+def offline_provider(monkeypatch):
+    # A developer's local key must never turn automated tests into live calls.
+    monkeypatch.setattr(settings, 'llm_provider', 'mock')
+    monkeypatch.setattr(settings, 'gemini_api_key', '')
+    monkeypatch.setattr(settings, 'osrmroute_api_key', '')
+    monkeypatch.setattr(settings, 'twogis_api_key', '')
+    monkeypatch.setattr(settings, 'live_place_search', False)
 
 
 @pytest.fixture

@@ -11,7 +11,7 @@ def test_api_flow_no_user_persistence(monkeypatch, tmp_path):
         assert client.get('/api/health').json()['status'] == 'ok'
         assert client.get('/api/ready').json()['ready']
         snapshot = {p.name: p.read_bytes() for p in tmp_path.iterdir()}
-        response = client.post('/api/recommendations', json={'query': 'personal-test-marker', 'latitude': 51.1061652, 'longitude': 71.4165705})
+        response = client.post('/api/recommendations', json={'query': 'Прогулка personal-test-marker', 'latitude': 51.1061652, 'longitude': 71.4165705})
         assert response.status_code == 200
         assert response.headers['cache-control'] == 'no-store'
         assert response.json()['recommendations']

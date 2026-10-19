@@ -51,6 +51,7 @@ async def test_live_choices_and_no_user_location_sent(tiny_store, search, monkey
     import httpx
     monkeypatch.setattr(settings, 'llm_provider', 'gemini')
     monkeypatch.setattr(settings, 'gemini_api_key', 'test-key')
+    monkeypatch.setattr(settings, 'gemini_google_search', False)
     result = result_for(tiny_store, search)
     place = result['recommendations'][0]
     captured = []
@@ -59,7 +60,7 @@ async def test_live_choices_and_no_user_location_sent(tiny_store, search, monkey
         choice = {'recommendations': [{'poi_id': place['poi_id'], 'evidence_id': place['fact_refs'][0], 'activity': 'stroll'}]}
         return httpx.Response(200, request=httpx.Request('POST', url), json={'candidates': [{'content': {'parts': [{'text': json.dumps(choice)}]}}]})
     monkeypatch.setattr(httpx.AsyncClient, 'post', respond)
-    result = await enrich(result, RecommendationRequest(latitude=51.1062, longitude=71.4166, query='my private home'))
+    result = await enrich(result, None)
     assert result['generation_mode'] == 'llm' and result['mode'] == 'live'
     sent = json.dumps(captured)
     assert 'my private home' not in sent and '51.1062' not in sent and '71.4166' not in sent

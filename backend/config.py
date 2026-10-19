@@ -6,9 +6,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=ROOT / '.env', extra='ignore')
-    llm_provider: str = 'mock'
+    llm_provider: str = 'gemini'
     gemini_api_key: str = ''
-    gemini_model: str = 'gemini-2.5-flash'
+    gemini_model: str = 'gemini-3.5-flash-lite'
+    gemini_google_search: bool = False
+    live_place_search: bool = True
+    osrmroute_api_key: str = ''
+    twogis_api_key: str = ''
     embedding_model: str = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
     semantic_search: bool = True
     walk_speed_kmh: float = 4.5
@@ -27,4 +31,7 @@ CATEGORIES = {
     'gallery': 'Галерея', 'attraction': 'Достопримечательность',
     'playground': 'Детская площадка', 'viewpoint': 'Смотровая площадка',
     'public_space': 'Общественное пространство',
+    'computer_club': 'Компьютерный клуб', 'restaurant': 'Ресторан',
+    'cinema': 'Кинотеатр', 'shopping_mall': 'Торговый центр',
+    'library': 'Библиотека', 'fitness': 'Фитнес и спорт',
 }

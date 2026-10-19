@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import time
 
@@ -19,6 +20,9 @@ QUERY = f'''[out:json][timeout:90];(
  nwr["leisure"~"^(park|garden|playground)$"]({','.join(map(str, BBOX))});
  nwr["tourism"~"^(museum|gallery|attraction|viewpoint)$"]({','.join(map(str, BBOX))});
  nwr["amenity"="cafe"]({','.join(map(str, BBOX))});
+ nwr["amenity"~"^(internet_cafe|gaming_centre|lan_gaming_centre|restaurant|cinema|library)$"]({','.join(map(str, BBOX))});
+ nwr["shop"="mall"]({','.join(map(str, BBOX))});
+ nwr["leisure"~"^(fitness_centre|sports_centre)$"]({','.join(map(str, BBOX))});
  nwr["place"="square"]({','.join(map(str, BBOX))});
 );out center meta;'''
 
@@ -53,6 +57,19 @@ def collect(path=RAW_PATH):
 
 
 def category(tags):
+    if re.search(r'компьютерн\w*\s+клуб|кибер\s*клуб|colizeum|cyber\s*x|cyber\s*arena',
+                 ' '.join(str(tags.get(k, '')) for k in ('name', 'name:ru', 'name:en', 'brand')), re.I):
+        return 'computer_club'
+    if tags.get('amenity') in ('internet_cafe', 'gaming_centre', 'lan_gaming_centre') or tags.get('leisure') == 'gaming_centre':
+        return 'computer_club'
+    if tags.get('amenity') in ('fast_food', 'food_court'):
+        return 'restaurant'
+    if tags.get('amenity') in ('restaurant', 'cinema', 'library'):
+        return tags['amenity']
+    if tags.get('shop') == 'mall':
+        return 'shopping_mall'
+    if tags.get('leisure') in ('fitness_centre', 'sports_centre'):
+        return 'fitness'
     if tags.get('leisure') in ('park', 'garden'):
         return 'park'
     if tags.get('leisure') == 'playground':
@@ -66,12 +83,15 @@ def category(tags):
     return None
 
 
-def normalize(raw):
+def normalize(raw, allow_generic=False):
     pois, rejected, seen = [], Counter(), set()
     collected = raw.get('_collected_at', datetime.now(timezone.utc).isoformat())
     for element in raw['elements']:
         tags = element.get('tags', {})
         kind = category(tags)
+        if not kind and allow_generic:
+            kind = element.get('_place_kind')
+        label = CATEGORIES.get(kind, element.get('_place_label', 'Место'))
         point = element if 'lat' in element else element.get('center', {})
         lat, lon = point.get('lat'), point.get('lon')
         identifier = f"osm:{element['type']}:{element['id']}"
@@ -86,7 +106,7 @@ def normalize(raw):
             continue
         # Anonymous playgrounds and parks are useful, but the label is transparent.
         name = tags.get('name:ru') or tags.get('name') or tags.get('name:en') or tags.get('name:kk')
-        if not name and kind not in ('playground', 'park', 'public_space'):
+        if not name and kind not in ('playground', 'park', 'public_space') and not allow_generic:
             rejected['missing_name'] += 1
             continue
         seen.add(identifier)
@@ -94,7 +114,7 @@ def normalize(raw):
         source_id = identifier + ':tags'
         description = tags.get('description:ru') or tags.get('description')
         origin = 'source' if description else 'derived_from_tags'
-        description = description or f"{CATEGORIES[kind]} в Астане." + (f' Адрес: {address}.' if address else '')
+        description = description or f"{label} в Астане." + (f' Адрес: {address}.' if address else '')
         flags = []
         if not name:
             flags.append('unnamed_in_source')
@@ -109,7 +129,8 @@ def normalize(raw):
             'fields': tags, 'sha256': hashlib.sha256(json.dumps(tags, sort_keys=True).encode()).hexdigest(),
         }]
         pois.append({
-            'id': identifier, 'name': name or f'{CATEGORIES[kind]} без названия в OSM',
+            'id': identifier, 'name': name or f'{label} без названия в OSM',
+            'category_label': label,
             'names': {k: v for k, v in tags.items() if k.startswith('name')},
             'latitude': lat, 'longitude': lon, 'coordinate_accuracy': 'point' if 'lat' in element else 'center',
             'categories': [kind], 'tags': tags, 'description': description[:1500], 'description_origin': origin,
