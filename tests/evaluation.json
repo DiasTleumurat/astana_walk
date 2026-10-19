@@ -1,0 +1,22 @@
+[
+  {"id":"park-botanical","resolvable":true,"expected_categories":["park"],"input":{"query":"Хочу погулять в парке","latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"coffee-botanical","resolvable":true,"expected_categories":["cafe"],"input":{"query":"Кофе рядом","latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"child-botanical","resolvable":true,"expected_categories":["playground","park"],"input":{"query":"С ребенком на площадку","with_child":true,"latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"museum-national","resolvable":true,"expected_categories":["museum"],"input":{"query":"Хочу в музей","latitude":51.1182297,"longitude":71.4693823,"minutes":90,"starts_at":"2026-10-20T15:00:00+05:00"}},
+  {"id":"coffee-expo","resolvable":true,"expected_categories":["cafe"],"input":{"query":"Выпить кофе","latitude":51.0895,"longitude":71.4115,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"child-expo","resolvable":true,"expected_categories":["playground","park"],"input":{"query":"Прогулка с ребенком","with_child":true,"latitude":51.0895,"longitude":71.4115,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"park-center","resolvable":true,"expected_categories":["park"],"input":{"query":"Зеленый парк для прогулки","latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"coffee-center","resolvable":true,"expected_categories":["cafe"],"input":{"query":"Кафе поблизости","latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"park-30","resolvable":true,"expected_categories":["park"],"input":{"query":"Парк на 30 минут","latitude":51.1061652,"longitude":71.4165705,"minutes":30,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"park-roundtrip","resolvable":true,"expected_categories":["park"],"input":{"query":"Парк, затем вернуться","return_to_start":true,"latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"coffee-strict-category","resolvable":true,"expected_categories":["cafe"],"input":{"interests":["cafe"],"latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"park-strict-category","resolvable":true,"expected_categories":["park"],"input":{"interests":["park"],"latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"playground-center","resolvable":true,"expected_categories":["playground"],"input":{"interests":["playground"],"latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"green-time-90","resolvable":true,"expected_categories":["park"],"input":{"query":"Посмотреть зелень, прогуляться","latitude":51.1061652,"longitude":71.4165705,"minutes":90,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"no-cafe","resolvable":true,"expected_categories":["park"],"input":{"query":"Парк без кафе","latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"quiet-cafe","resolvable":true,"expected_categories":["cafe"],"input":{"query":"Тихое кафе с кофе","latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"unknown-sockets","expected_empty":true,"input":{"query":"Кофе с розеткой","latitude":51.1061652,"longitude":71.4165705,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"outside-city","expected_empty":true,"input":{"latitude":43.2,"longitude":76.9,"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"insufficient-time","expected_empty":true,"input":{"minutes":15,"latitude":51.1061652,"longitude":71.4165705,"interests":["museum"],"starts_at":"2026-10-19T15:00:00+05:00"}},
+  {"id":"strict-unknown-viewpoint","expected_empty":true,"input":{"interests":["viewpoint"],"open_now":true,"latitude":51.1282,"longitude":71.4304,"starts_at":"2026-10-19T15:00:00+05:00"}}
+]

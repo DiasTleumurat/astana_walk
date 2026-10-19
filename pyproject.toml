@@ -1,0 +1,18 @@
+[project]
+name = "astana-walk"
+version = "0.1.0"
+description = "Evidence-based walking recommendations for Astana"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "httpx>=0.28,<1",
+  "pydantic-settings>=2.7,<3", "numpy>=2,<3", "fastembed>=0.6,<1",
+  "tzdata>=2025.1", "python-dotenv>=1,<2"
+]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"

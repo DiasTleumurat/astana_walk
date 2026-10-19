@@ -1,0 +1,7 @@
+{
+  "source": "OpenStreetMap / Overpass",
+  "query": "[out:json][timeout:90];(\nway[highway~\"^(primary|secondary|tertiary|trunk)$\"](51.02,71.30,51.23,71.60);\nway[waterway=\"river\"](51.02,71.30,51.23,71.60);\nway[natural=\"water\"](51.02,71.30,51.23,71.60);\nway[leisure=\"park\"](51.02,71.30,51.23,71.60);\n);out geom;",
+  "collected_at": "2026-10-19T13:03:31.755319+00:00",
+  "license": "ODbL 1.0",
+  "features": 3062
+}
