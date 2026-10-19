@@ -1,0 +1,14 @@
+.git
+.venv
+.cache
+.taste-skill
+.impeccable
+work
+*.log
+.env
+frontend/node_modules
+frontend/dist
+frontend/test-results
+data/runtime
+data/raw
+**/__pycache__

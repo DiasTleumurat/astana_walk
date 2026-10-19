@@ -1,0 +1,217 @@
+{
+  "dataset_version": "a4ef4e4a07363c68",
+  "retrieval_mode": "hybrid",
+  "hardware": "Windows-11-10.0.26300-SP0 / Intel64 Family 6 Model 141 Stepping 1, GenuineIntel",
+  "case_count": 20,
+  "passed": 20,
+  "hard_constraint_violations": [],
+  "category_hit_at_3": 1.0,
+  "resolvable_cases": 16,
+  "p95_ms": 17.72,
+  "median_ms": 11.13,
+  "method": "Fixed time and locations. Author-labeled acceptable POI categories, not independent human relevance scores. 20 local requests; LLM/network excluded. Category hit is a coarse proxy, not an end-to-end RAG quality score.",
+  "results": [
+    {
+      "id": "park-botanical",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад",
+        "Mereke Park",
+        "Линейный парк"
+      ],
+      "latency_ms": 20.3
+    },
+    {
+      "id": "coffee-botanical",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "JumpinGoat",
+        "Drinkit",
+        "Master Coffee"
+      ],
+      "latency_ms": 17.72
+    },
+    {
+      "id": "child-botanical",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM"
+      ],
+      "latency_ms": 13.04
+    },
+    {
+      "id": "museum-national",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Национальный музей Республики Казахстан",
+        "Назарбаев центр-2",
+        "Детская площадка без названия в OSM"
+      ],
+      "latency_ms": 11.56
+    },
+    {
+      "id": "coffee-expo",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Starbucks",
+        "Drinkit",
+        "Лепим и варим"
+      ],
+      "latency_ms": 11.64
+    },
+    {
+      "id": "child-expo",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM"
+      ],
+      "latency_ms": 9.85
+    },
+    {
+      "id": "park-center",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Парк без названия в OSM",
+        "Парк без названия в OSM",
+        "Парк без названия в OSM"
+      ],
+      "latency_ms": 14.83
+    },
+    {
+      "id": "coffee-center",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "marrone rosso",
+        "MÖKKi",
+        "Drinkit"
+      ],
+      "latency_ms": 15.16
+    },
+    {
+      "id": "park-30",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад"
+      ],
+      "latency_ms": 10.86
+    },
+    {
+      "id": "park-roundtrip",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад",
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM"
+      ],
+      "latency_ms": 8.08
+    },
+    {
+      "id": "coffee-strict-category",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "marrone rosso",
+        "MÖKKi",
+        "Drinkit"
+      ],
+      "latency_ms": 11.4
+    },
+    {
+      "id": "park-strict-category",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад",
+        "Линейный парк",
+        "Mereke Park"
+      ],
+      "latency_ms": 6.52
+    },
+    {
+      "id": "playground-center",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM",
+        "Детская площадка без названия в OSM"
+      ],
+      "latency_ms": 8.1
+    },
+    {
+      "id": "green-time-90",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад",
+        "Аллея мира и согласия",
+        "Mereke Park"
+      ],
+      "latency_ms": 13.5
+    },
+    {
+      "id": "no-cafe",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "Ботанический сад",
+        "Парк без названия в OSM",
+        "Линейный парк"
+      ],
+      "latency_ms": 10.27
+    },
+    {
+      "id": "quiet-cafe",
+      "passed": true,
+      "category_hit": true,
+      "places": [
+        "MÖKKi",
+        "marrone rosso",
+        "Drinkit"
+      ],
+      "latency_ms": 14.39
+    },
+    {
+      "id": "unknown-sockets",
+      "passed": true,
+      "category_hit": false,
+      "places": [],
+      "latency_ms": 6.9
+    },
+    {
+      "id": "outside-city",
+      "passed": true,
+      "category_hit": false,
+      "places": [],
+      "latency_ms": 0.11
+    },
+    {
+      "id": "insufficient-time",
+      "passed": true,
+      "category_hit": false,
+      "places": [],
+      "latency_ms": 6.22
+    },
+    {
+      "id": "strict-unknown-viewpoint",
+      "passed": true,
+      "category_hit": false,
+      "places": [],
+      "latency_ms": 6.36
+    }
+  ]
+}

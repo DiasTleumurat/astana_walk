@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T13:32:52.969Z",
+  "title": "Design System: Astana Walk",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Garden Ground",
+        "tonalRamp": [
+          "oklch(15.00% 0.0051 145.54)",
+          "oklch(26.43% 0.0051 145.54)",
+          "oklch(37.86% 0.0051 145.54)",
+          "oklch(49.29% 0.0051 145.54)",
+          "oklch(60.71% 0.0051 145.54)",
+          "oklch(72.14% 0.0051 145.54)",
+          "oklch(83.57% 0.0051 145.54)",
+          "oklch(95.00% 0.0051 145.54)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "White Surface",
+        "tonalRamp": [
+          "oklch(15.00% 0.0000 89.88)",
+          "oklch(26.43% 0.0000 89.88)",
+          "oklch(37.86% 0.0000 89.88)",
+          "oklch(49.29% 0.0000 89.88)",
+          "oklch(60.71% 0.0000 89.88)",
+          "oklch(72.14% 0.0000 89.88)",
+          "oklch(83.57% 0.0000 89.88)",
+          "oklch(95.00% 0.0000 89.88)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Botanical Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0237 169.66)",
+          "oklch(26.43% 0.0237 169.66)",
+          "oklch(37.86% 0.0237 169.66)",
+          "oklch(49.29% 0.0237 169.66)",
+          "oklch(60.71% 0.0237 169.66)",
+          "oklch(72.14% 0.0237 169.66)",
+          "oklch(83.57% 0.0237 169.66)",
+          "oklch(95.00% 0.0237 169.66)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Sage Ink",
+        "tonalRamp": [
+          "oklch(15.00% 0.0200 158.66)",
+          "oklch(26.43% 0.0200 158.66)",
+          "oklch(37.86% 0.0200 158.66)",
+          "oklch(49.29% 0.0200 158.66)",
+          "oklch(60.71% 0.0200 158.66)",
+          "oklch(72.14% 0.0200 158.66)",
+          "oklch(83.57% 0.0200 158.66)",
+          "oklch(95.00% 0.0200 158.66)"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Deep Teal",
+        "tonalRamp": [
+          "oklch(15.00% 0.0773 185.46)",
+          "oklch(26.43% 0.0773 185.46)",
+          "oklch(37.86% 0.0773 185.46)",
+          "oklch(49.29% 0.0773 185.46)",
+          "oklch(60.71% 0.0773 185.46)",
+          "oklch(72.14% 0.0773 185.46)",
+          "oklch(83.57% 0.0773 185.46)",
+          "oklch(95.00% 0.0773 185.46)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Deep Teal Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0673 186.51)",
+          "oklch(26.43% 0.0673 186.51)",
+          "oklch(37.86% 0.0673 186.51)",
+          "oklch(49.29% 0.0673 186.51)",
+          "oklch(60.71% 0.0673 186.51)",
+          "oklch(72.14% 0.0673 186.51)",
+          "oklch(83.57% 0.0673 186.51)",
+          "oklch(95.00% 0.0673 186.51)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Quiet Boundary",
+        "tonalRamp": [
+          "oklch(15.00% 0.0120 145.48)",
+          "oklch(26.43% 0.0120 145.48)",
+          "oklch(37.86% 0.0120 145.48)",
+          "oklch(49.29% 0.0120 145.48)",
+          "oklch(60.71% 0.0120 145.48)",
+          "oklch(72.14% 0.0120 145.48)",
+          "oklch(83.57% 0.0120 145.48)",
+          "oklch(95.00% 0.0120 145.48)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "Field Boundary",
+        "tonalRamp": [
+          "oklch(15.00% 0.0171 151.07)",
+          "oklch(26.43% 0.0171 151.07)",
+          "oklch(37.86% 0.0171 151.07)",
+          "oklch(49.29% 0.0171 151.07)",
+          "oklch(60.71% 0.0171 151.07)",
+          "oklch(72.14% 0.0171 151.07)",
+          "oklch(83.57% 0.0171 151.07)",
+          "oklch(95.00% 0.0171 151.07)"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Soft Hover",
+        "tonalRamp": [
+          "oklch(15.00% 0.0109 149.85)",
+          "oklch(26.43% 0.0109 149.85)",
+          "oklch(37.86% 0.0109 149.85)",
+          "oklch(49.29% 0.0109 149.85)",
+          "oklch(60.71% 0.0109 149.85)",
+          "oklch(72.14% 0.0109 149.85)",
+          "oklch(83.57% 0.0109 149.85)",
+          "oklch(95.00% 0.0109 149.85)"
+        ]
+      },
+      "selected-border": {
+        "role": "neutral",
+        "displayName": "Selected Edge",
+        "tonalRamp": [
+          "oklch(15.00% 0.0486 173.32)",
+          "oklch(26.43% 0.0486 173.32)",
+          "oklch(37.86% 0.0486 173.32)",
+          "oklch(49.29% 0.0486 173.32)",
+          "oklch(60.71% 0.0486 173.32)",
+          "oklch(72.14% 0.0486 173.32)",
+          "oklch(83.57% 0.0486 173.32)",
+          "oklch(95.00% 0.0486 173.32)"
+        ]
+      },
+      "map-ground": {
+        "role": "neutral",
+        "displayName": "Map Ground",
+        "tonalRamp": [
+          "oklch(15.00% 0.0113 141.26)",
+          "oklch(26.43% 0.0113 141.26)",
+          "oklch(37.86% 0.0113 141.26)",
+          "oklch(49.29% 0.0113 141.26)",
+          "oklch(60.71% 0.0113 141.26)",
+          "oklch(72.14% 0.0113 141.26)",
+          "oklch(83.57% 0.0113 141.26)",
+          "oklch(95.00% 0.0113 141.26)"
+        ]
+      },
+      "map-pin": {
+        "role": "neutral",
+        "displayName": "Map Pin",
+        "tonalRamp": [
+          "oklch(15.00% 0.0295 170.79)",
+          "oklch(26.43% 0.0295 170.79)",
+          "oklch(37.86% 0.0295 170.79)",
+          "oklch(49.29% 0.0295 170.79)",
+          "oklch(60.71% 0.0295 170.79)",
+          "oklch(72.14% 0.0295 170.79)",
+          "oklch(83.57% 0.0295 170.79)",
+          "oklch(95.00% 0.0295 170.79)"
+        ]
+      },
+      "water-edge": {
+        "role": "secondary",
+        "displayName": "River Glass Edge",
+        "tonalRamp": [
+          "oklch(15.00% 0.0375 200.72)",
+          "oklch(26.43% 0.0375 200.72)",
+          "oklch(37.86% 0.0375 200.72)",
+          "oklch(49.29% 0.0375 200.72)",
+          "oklch(60.71% 0.0375 200.72)",
+          "oklch(72.14% 0.0375 200.72)",
+          "oklch(83.57% 0.0375 200.72)",
+          "oklch(95.00% 0.0375 200.72)"
+        ]
+      },
+      "water-fill": {
+        "role": "secondary",
+        "displayName": "River Glass Fill",
+        "tonalRamp": [
+          "oklch(15.00% 0.0297 199.26)",
+          "oklch(26.43% 0.0297 199.26)",
+          "oklch(37.86% 0.0297 199.26)",
+          "oklch(49.29% 0.0297 199.26)",
+          "oklch(60.71% 0.0297 199.26)",
+          "oklch(72.14% 0.0297 199.26)",
+          "oklch(83.57% 0.0297 199.26)",
+          "oklch(95.00% 0.0297 199.26)"
+        ]
+      },
+      "park-edge": {
+        "role": "secondary",
+        "displayName": "Park Sage Edge",
+        "tonalRamp": [
+          "oklch(15.00% 0.0390 136.86)",
+          "oklch(26.43% 0.0390 136.86)",
+          "oklch(37.86% 0.0390 136.86)",
+          "oklch(49.29% 0.0390 136.86)",
+          "oklch(60.71% 0.0390 136.86)",
+          "oklch(72.14% 0.0390 136.86)",
+          "oklch(83.57% 0.0390 136.86)",
+          "oklch(95.00% 0.0390 136.86)"
+        ]
+      },
+      "park-fill": {
+        "role": "secondary",
+        "displayName": "Park Sage Fill",
+        "tonalRamp": [
+          "oklch(15.00% 0.0280 131.81)",
+          "oklch(26.43% 0.0280 131.81)",
+          "oklch(37.86% 0.0280 131.81)",
+          "oklch(49.29% 0.0280 131.81)",
+          "oklch(60.71% 0.0280 131.81)",
+          "oklch(72.14% 0.0280 131.81)",
+          "oklch(83.57% 0.0280 131.81)",
+          "oklch(95.00% 0.0280 131.81)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Compact page heading; smaller at tablet and phone widths."
+      },
+      "headline": {
+        "displayName": "Section headline",
+        "purpose": "Planner section titles."
+      },
+      "title": {
+        "displayName": "Place title",
+        "purpose": "Wrapping place names."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Root and desktop introduction."
+      },
+      "body-card": {
+        "displayName": "Card prose",
+        "purpose": "Recommendation reason and activity idea; final CSS overrides to 13px."
+      },
+      "label": {
+        "displayName": "Field label",
+        "purpose": "Field labels and time legend."
+      },
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Category, time, source and supporting facts."
+      }
+    },
+    "shadows": [
+      {
+        "name": "map-pin",
+        "value": "0 3px 8px #19362a20",
+        "purpose": "Anchors marker above geography."
+      },
+      {
+        "name": "online-map-disclosure",
+        "value": "0 4px 12px #19362a15",
+        "purpose": "Expanded map information."
+      },
+      {
+        "name": "coordinate-popover",
+        "value": "0 5px 18px #19362a18",
+        "purpose": "Positioned coordinate editor."
+      }
+    ],
+    "motion": [
+      {
+        "name": "control-color",
+        "value": "background 0.16s, color 0.16s",
+        "purpose": "Shared button state feedback."
+      },
+      {
+        "name": "disclosure-and-layout",
+        "value": "200ms",
+        "purpose": "About/filter disclosure and card position changes."
+      },
+      {
+        "name": "press-scale",
+        "value": "0.985",
+        "purpose": "Primary search press."
+      },
+      {
+        "name": "map-pan",
+        "value": "250ms",
+        "purpose": "Pans only as needed to keep the selected marker inside overlay-safe bounds: top-left [50,85], bottom-right [60,170]; no animation under reduced motion."
+      },
+      {
+        "name": "loading-pulse",
+        "value": "1s ease-in-out infinite",
+        "purpose": "Loading dot reaches opacity 0.35 halfway through."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "user",
+        "purpose": "MotionConfig, CSS and map panning honor the system preference."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-max",
+        "value": "700px"
+      },
+      {
+        "name": "tablet-max",
+        "value": "1000px"
+      },
+      {
+        "name": "wide-min",
+        "value": "1600px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Search Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Full-width teal search action; the active transform represents the Motion press state.",
+      "html": "<button class=\"ds-find\">Найти места <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button>",
+      "css": ".ds-find{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:center;justify-content:space-between;width:100%;height:48px;padding:0 20px;border:0;border-radius:999px;background:var(--accent,#1b6e66);color:#fff;font-size:13px;font-weight:650;cursor:pointer;transition:background .16s,color .16s}.ds-find:hover:not(:disabled){background:#155b55}.ds-find:active:not(:disabled){transform:scale(.985)}.ds-find:disabled{opacity:.7;cursor:wait}.ds-find:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}@media(prefers-reduced-motion:reduce){button{transition:none!important;transform:none!important;}}"
+    },
+    {
+      "name": "Text Action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Compact secondary action with visible keyboard focus.",
+      "html": "<button class=\"ds-text\">Выбрать на карте</button>",
+      "css": ".ds-text{font-family:\"Manrope Variable\",sans-serif;display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;padding:3px 0;color:var(--accent,#1b6e66);font-size:12px;cursor:pointer;transition:background .16s,color .16s}.ds-text:hover:not(:disabled){background:#e4ebe5}.ds-text:disabled{opacity:.7;cursor:wait}.ds-text:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}@media(prefers-reduced-motion:reduce){button{transition:none!important;transform:none!important;}}"
+    },
+    {
+      "name": "Preferences Field",
+      "kind": "input",
+      "refersTo": "preferences-field",
+      "description": "Native multiline preference input with restrained border and visible focus.",
+      "html": "<label class=\"ds-label\" for=\"ds-preferences\">Что хочется сегодня?</label><textarea class=\"ds-field\" id=\"ds-preferences\" placeholder=\"Тихая прогулка у воды\"></textarea>",
+      "css": ".ds-label{font-family:\"Manrope Variable\",sans-serif;display:block;font-size:13px;font-weight:650;margin:0 0 8px;color:var(--text,#25352f)}.ds-field{font-family:\"Manrope Variable\",sans-serif;width:100%;min-height:78px;max-height:160px;resize:vertical;line-height:1.6;padding:12px 13px;background:#fff;border:1px solid #cbd6cd;border-radius:12px;font-size:13px;color:var(--text,#25352f);caret-color:var(--accent,#1b6e66)}.ds-field::placeholder{color:var(--muted,#637068)}.ds-field:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}"
+    },
+    {
+      "name": "Scenario Chip",
+      "kind": "chip",
+      "refersTo": "scenario-chip",
+      "description": "Outlined suggestion pill; selected variant is exposed through aria-pressed.",
+      "html": "<button class=\"ds-scenario\" aria-pressed=\"false\">У воды</button> <button class=\"ds-scenario\" aria-pressed=\"true\">В парке</button>",
+      "css": ".ds-scenario{font-family:\"Manrope Variable\",sans-serif;display:inline-flex;gap:5px;align-items:center;padding:7px 8px;background:transparent;color:#627067;font-size:11px;border-radius:999px;border:1px solid var(--border,#dfe6df);cursor:pointer;transition:background .16s,color .16s}.ds-scenario[aria-pressed=\"true\"]{color:var(--text,#25352f);background:#eaf0eb;border-color:#d1ddd4}.ds-scenario:hover:not(:disabled){background:#e4ebe5}.ds-scenario:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}@media(prefers-reduced-motion:reduce){button{transition:none!important;transform:none!important;}}"
+    },
+    {
+      "name": "Recommendation Card",
+      "kind": "card",
+      "refersTo": "place-card",
+      "description": "A selected numbered recommendation. Labels demonstrate structure; real cards are populated from sourced records.",
+      "html": "<article class=\"ds-card\"><button class=\"ds-heading\" aria-pressed=\"true\"><span class=\"ds-number\">1</span><span><strong>Название места</strong><small>Категория из источника</small></span><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 17 17 7M7 7h10v10\"/></svg></button><p class=\"ds-measures\">≈ 12 мин в пути · 20 мин на месте</p><p class=\"ds-reason\">Причина рекомендации на основе выбранных предпочтений.</p><details class=\"ds-evidence\"><summary>Данные и источники</summary><p>Факты, источник и дата получения данных.</p></details></article>",
+      "css": ".ds-card{font-family:\"Manrope Variable\",sans-serif;padding:20px;background:#fff;color:var(--text,#25352f);border:1px solid #7ba497;border-radius:var(--radius,22px)}.ds-heading{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:flex-start;gap:10px;width:100%;padding:0;border:0;background:transparent;text-align:left;color:inherit;cursor:pointer}.ds-heading:hover{background:transparent}.ds-heading>span:nth-child(2){flex:1;min-width:0}.ds-heading strong{display:block;font-size:16px;font-weight:650;line-height:1.45;overflow-wrap:anywhere}.ds-heading small{display:block;margin-top:4px;font-size:11px;color:var(--muted,#637068)}.ds-number{display:flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0;border-radius:50%;background:var(--accent,#1b6e66);color:#fff;font-size:12px;font-variant-numeric:tabular-nums}.ds-measures{margin:15px 0 10px;font-size:11px;color:var(--muted,#637068);font-variant-numeric:tabular-nums}.ds-reason{margin:0;font-size:13px;line-height:1.75}.ds-evidence{margin-top:14px;padding-top:12px;border-top:1px solid var(--border,#dfe6df);font-size:11px;color:var(--muted,#637068)}.ds-evidence summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between}.ds-evidence summary:after{content:\"+\"}.ds-evidence[open] summary:after{content:\"−\"}.ds-evidence p{line-height:1.7}.ds-heading:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}.ds-evidence summary:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}"
+    },
+    {
+      "name": "Mobile List / Map Navigation",
+      "kind": "nav",
+      "refersTo": "mobile-navigation",
+      "description": "Phone surface switch; both buttons expose their selection state.",
+      "html": "<nav class=\"ds-view\" aria-label=\"Вид результатов\"><button aria-pressed=\"true\">Список</button><button aria-pressed=\"false\">Карта</button></nav>",
+      "css": ".ds-view{display:flex;background:#e7ece6;border-radius:999px;padding:4px;gap:4px}.ds-view button{font-family:\"Manrope Variable\",sans-serif;background:transparent;color:var(--text,#25352f);border:0;flex:1;min-height:40px;border-radius:999px;font-size:12px;cursor:pointer;transition:background .16s,color .16s}.ds-view button[aria-pressed=\"true\"]{background:#fff}.ds-view button:hover:not(:disabled){background:#e4ebe5}.ds-view button:focus-visible{outline:2px solid var(--accent,#1b6e66);outline-offset:4px;}@media(prefers-reduced-motion:reduce){button{transition:none!important;transform:none!important;}}"
+    },
+    {
+      "name": "Numbered Map Pin",
+      "kind": "custom",
+      "refersTo": "map-pin",
+      "description": "Asymmetric map marker with a counter-rotated number; selected marker is larger and teal.",
+      "html": "<div class=\"ds-pins\"><span class=\"ds-pin\"><b>2</b></span><span class=\"ds-pin ds-selected\"><b>1</b></span></div>",
+      "css": ".ds-pins{display:flex;gap:24px;padding:16px}.ds-pin{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);border:3px solid white;background:#4b6159;color:white;font-weight:700;font-size:12px;box-shadow:0 3px 8px #19362a20;font-variant-numeric:tabular-nums}.ds-pin b{transform:rotate(45deg);font-weight:650}.ds-pin.ds-selected{background:var(--accent,#1b6e66);width:40px;height:40px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A pocket garden guide",
+    "overview": "Astana Walk is a calm botanical field guide for an urban walk. A light sage ground, white surfaces and restrained deep teal make the map and nearby places easy to read outdoors. Real map geometry and numbered recommendations are the visual material; familiar controls and progressive disclosure keep the interface approachable.\n\nThe Russian-first identity uses self-hosted Manrope with Cyrillic and Latin coverage. The original A/walking-path SVG and one Lucide outline icon family support the same quiet voice. Motion provides feedback through presses, disclosure and changed result positions; it does not stage a page entrance.",
+    "keyCharacteristics": [
+      "Sage ground, white panels and a limited teal accent.",
+      "Readable Cyrillic typography with compact metadata.",
+      "Real geography linked to numbered recommendation cards.",
+      "Flat surfaces with small shadows only on map markers and overlays."
+    ],
+    "rules": [
+      {
+        "name": "The Map Meaning Rule",
+        "body": "Water and park colors describe source geometry; teal identifies actions and selection.",
+        "section": "colors"
+      },
+      {
+        "name": "The Readable Numbers Rule",
+        "body": "Use tabular numerals for durations, distances, ranks and radius values. Keep compact metadata at the implemented minimum of 11px; do not shrink it to fit.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Panel Rule",
+        "body": "Main planner and recommendation cards stay shadow-free; shadows identify objects floating above the map or form.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do preserve Cyrillic-capable, self-hosted Manrope and readable metadata.",
+      "Do pair map ranks with the same numbered cards and expose selection in control semantics.",
+      "Do retain source attribution and label uncertain facts, suggested activities and estimated times.",
+      "Do keep focus visible and honor reduced-motion preferences.",
+      "Do use the sage/white surface hierarchy and restrained teal actions."
+    ],
+    "donts": [
+      "Don't turn the search-radius circle into an implied walking route.",
+      "Don't introduce fabricated venues, decorative fake charts or confidence percentages.",
+      "Don't add shadows to the main planner and recommendation cards.",
+      "Don't replace the compact Cyrillic heading with a giant type specimen or Latin-only face.",
+      "Don't hide stale results or missing-data states behind reassuring visual badges."
+    ]
+  }
+}
