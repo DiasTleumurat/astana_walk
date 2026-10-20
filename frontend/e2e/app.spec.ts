@@ -140,3 +140,32 @@ test("map failure preserves list; API error has retry", async ({ page }) => {
     page.getByRole("button", { name: "Попробовать снова" }),
   ).toBeVisible();
 });
+
+test("stop on the way and provider rating", async ({ page }) => {
+  // The saved catalog has no ratings; 2GIS supplies them in live mode.
+  await page.route("**/api/recommendations", async (route) => {
+    const response = await route.fetch();
+    const data = await response.json();
+    if (data.recommendations[0])
+      data.recommendations[0].rating = {
+        value: 4.7,
+        count: 312,
+        source: "2ГИС",
+        url: "https://2gis.kz/astana/firm/1/tab/reviews",
+      };
+    await route.fulfill({ response, json: data });
+  });
+  await page.goto("/");
+  await page
+    .getByPlaceholder("Например, кофе и немного архитектуры")
+    .fill("Погулять в парке и по пути выпить кофе");
+  const result = await (await submitSearch(page)).json();
+  expect(result.stop_request.label).toBe("Кофейня");
+  const card = page.getByTestId("place-card").first();
+  await expect(card.getByTestId("place-stop")).toContainText("По пути");
+  await expect(card.getByTestId("place-rating")).toContainText("312 отзывов");
+  await expect(card.getByTestId("place-rating")).toHaveAttribute(
+    "href",
+    /tab\/reviews$/,
+  );
+});

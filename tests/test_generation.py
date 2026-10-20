@@ -2,7 +2,7 @@ import copy
 from datetime import datetime, timezone
 import pytest
 from backend.config import settings
-from backend.generation import Choices, apply_choices, enrich
+from backend.generation import Choice, Choices, apply_choices, enrich
 from backend.models import RecommendationRequest
 from backend.recommend import recommend
 
@@ -78,3 +78,29 @@ async def test_invalid_json_retries_once_then_falls_back(tiny_store, search, mon
     monkeypatch.setattr(httpx.AsyncClient, 'post', respond)
     result = await enrich(result_for(tiny_store, search), None)
     assert len(calls) == 2 and result['generation_mode'] == 'template'
+
+
+def test_every_category_has_activity_options():
+    from backend.config import CATEGORIES
+    from backend.generation import ACTIVITY_VARIANTS, activity_options
+    activities = set(Choice.model_fields['activity'].annotation.__args__)
+    assert set(CATEGORIES) <= set(ACTIVITY_VARIANTS)
+    assert all(set(v) <= activities for v in ACTIVITY_VARIANTS.values())
+    assert activity_options('stadium')
+
+
+async def test_live_choices_for_restaurant(tiny_store, search, monkeypatch):
+    import json
+    import httpx
+    monkeypatch.setattr(settings, 'llm_provider', 'gemini')
+    monkeypatch.setattr(settings, 'gemini_api_key', 'test-key')
+    result = result_for(tiny_store, search)
+    result['recommendations'] = result['recommendations'][:1]
+    place = result['recommendations'][0]
+    place['category'] = 'restaurant'
+    async def respond(self, url, **kwargs):
+        choice = {'recommendations': [{'poi_id': place['poi_id'], 'evidence_id': place['fact_refs'][0], 'activity': 'break'}]}
+        return httpx.Response(200, request=httpx.Request('POST', url), json={'candidates': [{'content': {'parts': [{'text': json.dumps(choice)}]}}]})
+    monkeypatch.setattr(httpx.AsyncClient, 'post', respond)
+    result = await enrich(result, None)
+    assert result['generation_mode'] == 'llm'

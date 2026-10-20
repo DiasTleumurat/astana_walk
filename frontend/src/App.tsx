@@ -130,6 +130,7 @@ export default function App() {
   const [geoStatus, setGeoStatus] = useState("");
   const [locating, setLocating] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  const [resultStart, setResultStart] = useState<Point | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [loading, setLoading] = useState(false);
@@ -158,6 +159,7 @@ export default function App() {
     const abort = new AbortController();
     controller.current = abort;
     const requestRevision = revision.current;
+    const requestPoint = point;
     setLoading(true);
     setError("");
     const timer = setTimeout(() => abort.abort("timeout"), 80000);
@@ -192,6 +194,7 @@ export default function App() {
       const data: Result = await response.json();
       if (controller.current !== abort) return;
       setResult(data);
+      setResultStart(requestPoint);
       setActive(data.recommendations[0]?.poi_id || null);
       setDirty(revision.current !== requestRevision);
       if (!initial) {
@@ -976,6 +979,7 @@ export default function App() {
                     place={place}
                     index={i}
                     active={active === place.poi_id}
+                    start={resultStart}
                     onSelect={() => {
                       setActive(place.poi_id);
                       setMobileView("map");

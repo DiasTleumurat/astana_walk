@@ -1,6 +1,71 @@
 import { motion } from "motion/react";
-import { ArrowUpRight, Clock3, Footprints, MapPin } from "lucide-react";
-import type { Place } from "./types";
+import {
+  ArrowUpRight,
+  Clock3,
+  Footprints,
+  MapPin,
+  Navigation,
+  ShoppingBag,
+  Star,
+} from "lucide-react";
+import type { Place, Point, Rating } from "./types";
+
+const TWOGIS = "https://2gis.kz/astana";
+const coord = (lon: number, lat: number) =>
+  `${lon.toFixed(6)},${lat.toFixed(6)}`;
+
+type Target = Pick<Place, "poi_id" | "latitude" | "longitude" | "distance_m">;
+
+/** 2GIS web links; on phones they open the 2GIS app when it is installed. */
+export function twoGisLinks(place: Target, start?: Point | null) {
+  const firm = place.poi_id.match(/^2gis:(\d+)$/)?.[1];
+  const dest = coord(place.longitude, place.latitude);
+  return {
+    open: firm ? `${TWOGIS}/firm/${firm}` : `${TWOGIS}/geo/${dest}`,
+    route:
+      start && place.distance_m >= 30
+        ? `${TWOGIS}/directions/tab/pedestrian/points/${coord(start.longitude, start.latitude)}%7C${dest}`
+        : null,
+  };
+}
+
+const reviewsWord = (n: number) => {
+  const tens = n % 100,
+    ones = n % 10;
+  if (tens >= 11 && tens <= 14) return "отзывов";
+  return ones === 1 ? "отзыв" : ones >= 2 && ones <= 4 ? "отзыва" : "отзывов";
+};
+
+function RatingBadge({ rating }: { rating: Rating }) {
+  const text = (
+    <>
+      <Star size={13} aria-hidden="true" />
+      <b>{rating.value.toFixed(1)}</b>
+      {rating.count ? (
+        <span>
+          · {rating.count} {reviewsWord(rating.count)}
+        </span>
+      ) : null}
+      {rating.source && <span>в {rating.source}</span>}
+    </>
+  );
+  return rating.url ? (
+    <a
+      className="rating"
+      href={rating.url}
+      target="_blank"
+      rel="noreferrer"
+      data-testid="place-rating"
+      aria-label={`Рейтинг ${rating.value.toFixed(1)}, читать отзывы в ${rating.source || "источнике"}`}
+    >
+      {text}
+    </a>
+  ) : (
+    <span className="rating" data-testid="place-rating">
+      {text}
+    </span>
+  );
+}
 
 export const dateLabel = (date: string) =>
   new Intl.DateTimeFormat("ru", {
@@ -14,12 +79,17 @@ export default function PlaceCard({
   index,
   active,
   onSelect,
+  start,
 }: {
   place: Place;
   index: number;
   active: boolean;
   onSelect: () => void;
+  start?: Point | null;
 }) {
+  const links = twoGisLinks(place, start);
+  const stop = place.stop;
+  const stopLinks = stop && twoGisLinks(stop, start);
   return (
     <motion.article
       layout="position"
@@ -39,8 +109,8 @@ export default function PlaceCard({
           <h3>{place.name}</h3>
           <span className="place-category">{place.category_label}</span>
         </span>
-        <ArrowUpRight size={20} />
       </button>
+      {place.rating && <RatingBadge rating={place.rating} />}
       <div className="place-measures">
         <span>
           <Footprints size={14} /> ≈ {place.walk_minutes} мин в пути
@@ -50,6 +120,29 @@ export default function PlaceCard({
         </span>
       </div>
       <p className="place-reason">{place.reason}</p>
+      {stop && stopLinks && (
+        <div className="stop" data-testid="place-stop">
+          <span className="stop-title">
+            <ShoppingBag size={14} /> По пути · +{stop.extra_minutes} мин
+          </span>
+          <strong>{stop.name}</strong>
+          <span className="stop-meta">
+            {stop.category_label}
+            {stop.address ? ` · ${stop.address}` : ""}
+          </span>
+          {stop.rating && <RatingBadge rating={stop.rating} />}
+          <div className="place-links">
+            <a href={stopLinks.open} target="_blank" rel="noreferrer">
+              <MapPin size={14} /> Открыть в 2ГИС
+            </a>
+            {stopLinks.route && (
+              <a href={stopLinks.route} target="_blank" rel="noreferrer">
+                <Navigation size={14} /> Маршрут до остановки
+              </a>
+            )}
+          </div>
+        </div>
+      )}
       <div className="activity">
         <span>Идея для прогулки</span>
         <p>{place.suggested_activity}</p>
@@ -63,6 +156,26 @@ export default function PlaceCard({
             : "Часы работы не подтверждены"}
         </span>
         <span className="time-total">≈ {place.total_minutes} мин всего</span>
+      </div>
+      <div className="place-links">
+        <a
+          href={links.open}
+          target="_blank"
+          rel="noreferrer"
+          data-testid="open-2gis"
+        >
+          <MapPin size={14} /> Открыть в 2ГИС
+        </a>
+        {links.route && (
+          <a
+            href={links.route}
+            target="_blank"
+            rel="noreferrer"
+            data-testid="route-2gis"
+          >
+            <Navigation size={14} /> Маршрут пешком
+          </a>
+        )}
       </div>
       <details className="evidence">
         <summary>Данные и источники</summary>

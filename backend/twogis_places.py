@@ -10,7 +10,7 @@ import httpx
 
 from backend.config import BBOX, CATEGORIES, settings
 from backend.live_places import LiveSearchError, MemoryPlaces
-from backend.recommend import interpret, recommend
+from backend.recommend import interpret, recommend, scenic
 from backend.models import RecommendationRequest
 
 URL = 'https://catalog.api.2gis.com/3.0/items'
@@ -35,6 +35,8 @@ def queries_for(request, intent):
         return [CATEGORIES[k] for k in intent.categories]
     if (intent and intent.general) or not request.query.strip():
         return ['Парки', 'Достопримечательности', 'Кафе']
+    if scenic(request.query):
+        return ['Парки', 'Набережные', 'Смотровые площадки', 'Достопримечательности']
     return [request.query]  # Native text search is not limited to our quick filters or OSM tags.
 
 
@@ -63,6 +65,7 @@ def normalize_items(items):
         kinds = interpret(rubric_request)['interests']
         kind = 'computer_club' if any(r.get('id') == '178' or r.get('alias') == 'kompyuternye_kluby' for r in rubrics) else (kinds[0] if kinds else '2gis:' + str(primary.get('id', 'place')))
         address = item.get('address_name') if isinstance(item.get('address_name'), str) else None
+        rating, review_count = reviews_of(item)
         source = {'id': '2gis:' + identifier + ':attributes', 'name': '2ГИС',
             'url': 'https://2gis.kz/astana/firm/' + identifier,
             'collected_at': collected, 'license': '2GIS API terms',
@@ -75,8 +78,45 @@ def normalize_items(items):
             'address': address, 'opening_hours_raw': None, 'timezone': 'Asia/Almaty',
             'wheelchair': None, 'sockets': None, 'child_friendly': None,
             'sources': [source], 'collected_at': collected, 'source_updated_at': None,
+            'rating': rating, 'review_count': review_count, 'rating_source': '2ГИС' if rating else None,
+            'reviews_url': f'https://2gis.kz/astana/firm/{identifier}/tab/reviews' if rating else None,
             'data_quality_flags': ['missing_opening_hours'], 'provider_search_match': True})
     return {'pois': pois, 'version': hashlib.sha256(json.dumps(pois, sort_keys=True).encode()).hexdigest()[:16]}
+
+
+def reviews_of(item):
+    """2GIS aggregate rating; review texts are not part of the Places API."""
+    reviews = item.get('reviews')
+    if not isinstance(reviews, dict):
+        return None, None
+    rating, count = reviews.get('general_rating'), reviews.get('general_review_count')
+    if isinstance(rating, bool) or not isinstance(rating, (int, float)) or not 0 < rating <= 5:
+        return None, None
+    if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+        return None, None
+    return round(float(rating), 1), count
+
+
+async def fetch_page(client, request, query, page=1):
+    response = await client.get(URL, params={'key': settings.twogis_api_key, 'q': query,
+        'point': f'{request.longitude},{request.latitude}', 'radius': request.radius_m,
+        'sort': 'distance', 'page_size': 5, 'page': page, 'fields': 'items.point,items.rubrics,items.reviews'})
+    data = response.json()
+    if not isinstance(data, dict) or not isinstance(data.get('meta'), dict):
+        raise ValueError('Invalid metadata')
+    code = data.get('meta', {}).get('code', response.status_code)
+    if code in (401, 403):
+        raise TwoGISSearchError('2ГИС: проверьте ключ, доступ Places API и ограничения ключа в кабинете.')
+    if code in (402, 429):
+        raise TwoGISSearchError('2ГИС: достигнут лимит запросов или закончился доступ к API.')
+    if code == 404:
+        return [], 0
+    if code != 200 or response.status_code != 200:
+        raise TwoGISSearchError('2ГИС временно недоступен. Повторите поиск позже.')
+    result = data.get('result', {})
+    if not isinstance(result, dict) or not isinstance(result.get('items'), list):
+        raise ValueError('Invalid items')
+    return result['items'], int(result.get('total', 0))
 
 
 async def find_twogis(request, intent):
@@ -89,25 +129,7 @@ async def find_twogis(request, intent):
             async with httpx.AsyncClient(timeout=10) as client:
                 async def fetch(query, page):
                     async with semaphore:
-                        response = await client.get(URL, params={'key': settings.twogis_api_key, 'q': query,
-                            'point': f'{request.longitude},{request.latitude}', 'radius': request.radius_m,
-                            'sort': 'distance', 'page_size': 5, 'page': page, 'fields': 'items.point,items.rubrics'})
-                        data = response.json()
-                        if not isinstance(data, dict) or not isinstance(data.get('meta'), dict):
-                            raise ValueError('Invalid metadata')
-                        code = data.get('meta', {}).get('code', response.status_code)
-                        if code in (401, 403):
-                            raise TwoGISSearchError('2ГИС: проверьте ключ, доступ Places API и ограничения ключа в кабинете.')
-                        if code in (402, 429):
-                            raise TwoGISSearchError('2ГИС: достигнут лимит запросов или закончился доступ к API.')
-                        if code == 404:
-                            return [], 0
-                        if code != 200 or response.status_code != 200:
-                            raise TwoGISSearchError('2ГИС временно недоступен. Повторите поиск позже.')
-                        result = data.get('result', {})
-                        if not isinstance(result, dict) or not isinstance(result.get('items'), list):
-                            raise ValueError('Invalid items')
-                        return result['items'], int(result.get('total', 0))
+                        return await fetch_page(client, request, query, page)
                 first = await asyncio.gather(*(fetch(q, 1) for q in queries))
                 items = [item for batch, _ in first for item in batch]
                 total = sum(count for _, count in first)

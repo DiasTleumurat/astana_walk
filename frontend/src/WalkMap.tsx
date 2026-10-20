@@ -129,11 +129,21 @@ export default function WalkMap(props: Props) {
       });
     return () => controller.abort();
   }, [online]);
+  // Several places can share one stop; draw each stop once.
+  const stops = [
+    ...new Map(
+      props.places.flatMap((p) =>
+        p.stop ? [[p.stop.poi_id, p.stop]] : [],
+      ) as [string, NonNullable<Place["stop"]>][],
+    ).values(),
+  ];
+  const activeStop = props.places.find((p) => p.poi_id === props.active)?.stop
+    ?.poi_id;
   const fit = () =>
     map?.fitBounds(
       L.latLngBounds([
         [props.point.latitude, props.point.longitude],
-        ...props.places.map(
+        ...[...props.places, ...stops].map(
           (p) => [p.latitude, p.longitude] as [number, number],
         ),
       ]),
@@ -265,6 +275,26 @@ export default function WalkMap(props: Props) {
                 )}
               </div>
             </Popup>
+          </Marker>
+        ))}
+        {stops.map((stop) => (
+          <Marker
+            key={stop.poi_id}
+            autoPanOnFocus={false}
+            position={[stop.latitude, stop.longitude]}
+            zIndexOffset={-100}
+            icon={L.divIcon({
+              className: "place-pin-wrap",
+              html: `<span class="stop-pin ${activeStop === stop.poi_id ? "selected" : ""}"></span>`,
+              iconSize: [20, 20],
+              iconAnchor: [10, 10],
+            })}
+            title={stop.name}
+            alt={`По пути: ${stop.name}`}
+          >
+            <Tooltip direction="top" offset={[0, -10]}>
+              По пути: {stop.name}
+            </Tooltip>
           </Marker>
         ))}
         <MapControls {...props} />

@@ -21,6 +21,28 @@ export type Source = {
   collected_at: string;
   fields: Record<string, string>;
 };
+export type Rating = {
+  value: number;
+  count: number | null;
+  source: string | null;
+  url: string | null;
+};
+export type Stop = {
+  poi_id: string;
+  name: string;
+  category_label: string;
+  latitude: number;
+  longitude: number;
+  address: string | null;
+  distance_m: number;
+  detour_m: number;
+  walk_minutes: number;
+  visit_minutes: number;
+  extra_minutes: number;
+  opening_status: "open" | "closed" | "unknown";
+  rating: Rating | null;
+  sources: Source[];
+};
 export type Place = {
   poi_id: string;
   name: string;
@@ -47,6 +69,8 @@ export type Place = {
   warnings: string[];
   wheelchair: boolean | null;
   sockets: boolean | null;
+  rating?: Rating | null;
+  stop?: Stop | null;
 };
 export type Result = {
   place_provider?: string;
@@ -66,6 +90,7 @@ export type Result = {
     search_suggestions: string;
     checked_at: string;
   };
+  stop_request?: { label: string; query: string };
   request_id: string;
   mode: "demo" | "live";
   generation_mode: "llm" | "template";

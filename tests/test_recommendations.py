@@ -92,3 +92,29 @@ def test_source_ids_match_selected_places(tiny_store, search):
 def test_unsupported_opening_expression_stays_unknown(tiny_store, search):
     tiny_store.by_id['osm:node:1']['opening_hours_raw'] = 'Mo-Su sunrise-sunset'
     assert not recommend(request(open_now=True), tiny_store, search)['recommendations']
+
+
+@pytest.mark.parametrize('query, minutes', [
+    ('Гулять 1.5 часа', 90), ('1,5 часа', 90), ('полтора часа в парке', 90), ('на полчаса', 30),
+    ('два с половиной часа', 150), ('1 час 30 минут', 90), ('на час в кафе', 60), ('1-2 часа', 120),
+    ('10 часов', 180), ('30 минут, потом 2 часа', 30), ('часы работы парка', 180),
+])
+def test_duration_phrases(query, minutes):
+    assert interpret(request(query=query, minutes=180))['minutes'] == minutes
+
+
+@pytest.mark.parametrize('query, interests', [
+    ('small кафе', ['cafe']), ('нужна парковка рядом', []), ('без парковки, в кафе', ['cafe']),
+    ('в торговый центр', ['shopping_mall']), ('mall', ['shopping_mall']), ('парков рядом нет?', ['park']),
+])
+def test_keywords_match_word_starts_only(query, interests):
+    parsed = interpret(request(query=query))
+    assert parsed['interests'] == interests and parsed['excluded'] == []
+
+
+@pytest.mark.parametrize('query, roundtrip', [
+    ('Парк, затем вернуться', True), ('нужно возвращаться к старту', True), ('туда и обратно', True),
+    ('не хочу возвращаться', False), ('не надо вернуться', False), ('без возвращения', False),
+])
+def test_return_to_start_respects_negation(query, roundtrip):
+    assert interpret(request(query=query))['return_to_start'] is roundtrip

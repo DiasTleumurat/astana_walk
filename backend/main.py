@@ -1,6 +1,8 @@
-from collections import Counter, defaultdict, deque
+from collections import Counter, OrderedDict, deque
 from contextlib import asynccontextmanager
+import asyncio
 import hashlib
+import ipaddress
 import secrets
 import time
 import re
@@ -19,6 +21,7 @@ from backend.twogis_places import find_twogis, TwoGISSearchError
 from backend.models import RecommendationRequest
 from backend.recommend import recommend
 from backend.search import Search
+from backend.stops import attach_stops, split_stop, stop_candidates
 from backend.storage import Store
 
 
@@ -30,8 +33,24 @@ async def lifespan(app):
 
 
 app = FastAPI(title='Astana Walk', version='0.1.0', lifespan=lifespan)
-_buckets = defaultdict(deque)
+_buckets = OrderedDict()
+_MAX_BUCKETS = 2048
 _salt = secrets.token_bytes(16)
+
+
+def client_address(request: Request):
+    peer = request.client.host if request.client else 'local'
+    hops = settings.trusted_proxy_hops
+    if hops <= 0:
+        return peer
+    chain = [part.strip() for header in request.headers.getlist('x-forwarded-for') for part in header.split(',')]
+    # Each trusted proxy appends the address it saw; entries further left are client-supplied.
+    if len(chain) < hops:
+        return peer
+    try:
+        return str(ipaddress.ip_address(chain[-hops]))
+    except ValueError:
+        return peer
 
 
 @app.middleware('http')
@@ -48,10 +67,12 @@ async def limits(request: Request, call_next):
                     return JSONResponse({'detail': 'Запрос слишком большой.'}, status_code=413)
             request._body = body
             now = time.monotonic()
-            key = hashlib.blake2b((request.client.host if request.client else 'local').encode(), key=_salt, digest_size=12).digest()
-            if len(_buckets) > 2048:
-                _buckets.clear()
-            times = _buckets[key]
+            key = hashlib.blake2b(client_address(request).encode(), key=_salt, digest_size=12).digest()
+            times = _buckets.setdefault(key, deque())
+            _buckets.move_to_end(key)
+            # Evict the least recently seen clients, never the active ones' history.
+            while len(_buckets) > _MAX_BUCKETS:
+                _buckets.popitem(last=False)
             while times and times[0] < now - 60:
                 times.popleft()
             if len(times) >= 30:
@@ -98,22 +119,28 @@ def poi(identifier: str):
 
 @app.post('/api/recommendations')
 async def recommendations(request: RecommendationRequest):
-    simple = re.fullmatch(r'\s*(?:(?:хочу|найди|найдите)(?: мне)?\s+)?(?:в\s+)?(?:компьютерн\w* клуб\w*|комп\.? клуб\w*|кофе|кафе|парк\w*|кинотеатр\w*|музе\w*)[.!?\s]*', request.query, re.I)
+    # "Погулять в парке и по пути купить кофе": search the destination, then the stop.
+    split = split_stop(request.query)
+    wish = request.model_copy(update={'query': split[0]}) if split else request
+    stop_search = asyncio.create_task(stop_candidates(request, split[1], app.state.store)) if split else None
+    async def with_stop(result):
+        return attach_stops(result, request, *await stop_search) if stop_search else result
+    simple = re.fullmatch(r'\s*(?:(?:хочу|найди|найдите)(?: мне)?\s+)?(?:в\s+)?(?:компьютерн\w* клуб\w*|комп\.? клуб\w*|кофе|кафе|парк\w*|кинотеатр\w*|музе\w*)[.!?\s]*', wish.query, re.I)
     keyed_search = bool(settings.twogis_api_key or settings.osrmroute_api_key)
-    local_intent = local_place_intent(request) if request.use_ai and keyed_search else None
-    intent = local_intent or (None if keyed_search and (simple or (request.interests and not request.query.strip())) else await resolve_intent(request))
+    local_intent = local_place_intent(wish) if wish.use_ai and keyed_search else None
+    intent = local_intent or (None if keyed_search and (simple or (wish.interests and not wish.query.strip())) else await resolve_intent(wish))
     live_failed = False
     provider_error = None
-    if request.use_ai and settings.live_place_search:
+    if wish.use_ai and settings.live_place_search:
         try:
-            live = await (find_twogis(request, intent) if settings.twogis_api_key else (find_osrm(request, intent) if settings.osrmroute_api_key else find_live(request, intent)))
+            live = await (find_twogis(wish, intent) if settings.twogis_api_key else (find_osrm(wish, intent) if settings.osrmroute_api_key else find_live(wish, intent)))
             if live is not None:
-                return live
+                return await with_stop(live)
         except LiveSearchError as error:
             live_failed = True
             if isinstance(error, (OSRMSearchError, TwoGISSearchError)):
                 provider_error = error.public_message
-    result = await run_in_threadpool(recommend, request, app.state.store, app.state.search, intent)
+    result = await with_stop(await run_in_threadpool(recommend, wish, app.state.store, app.state.search, intent))
     result['data_mode'] = 'snapshot'
     if live_failed:
         result['warnings'].append('Онлайн-источник сейчас недоступен. Показан сохранённый каталог, а не результат свежего поиска. Попробуйте ещё раз.')

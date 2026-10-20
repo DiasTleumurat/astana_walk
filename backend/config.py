@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     semantic_search: bool = True
     walk_speed_kmh: float = 4.5
     walk_detour_factor: float = 1.3
+    # Reverse proxies in front of the app that append to X-Forwarded-For.
+    # 0 trusts no header: a direct client could otherwise spoof its address.
+    trusted_proxy_hops: int = 0
     data_path: Path = ROOT / 'data' / 'poi.json'
     runtime_dir: Path = ROOT / 'data' / 'runtime'
     model_cache: Path = ROOT / '.cache' / 'models'
