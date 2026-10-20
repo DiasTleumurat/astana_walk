@@ -1,0 +1,27 @@
+# Render Blueprint: New + > Blueprint > this repository.
+services:
+  - type: web
+    name: astana-walk
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # The image listens on 8000; Render routes traffic to $PORT.
+      - key: PORT
+        value: "8000"
+      # Render's proxy appends the visitor address to X-Forwarded-For.
+      - key: TRUSTED_PROXY_HOPS
+        value: "1"
+      # The free plan has 512 MB RAM; the embedding model does not fit reliably.
+      - key: SEMANTIC_SEARCH
+        value: "false"
+      - key: LLM_PROVIDER
+        value: gemini
+      # Secrets are entered in the Render dashboard, never committed.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TWOGIS_API_KEY
+        sync: false
